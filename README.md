@@ -22,7 +22,7 @@ A full-stack web application featuring user authentication, built with Node.js, 
    docker-compose up build
    ```
 
-3.Start the frontend using app.js:
+3. Start the frontend using app.js:
    ```bash
    node app.js
    ```
