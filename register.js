@@ -37,12 +37,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           alert(data.error);
         }
-        alert("Registration successful! Please login.")
-        window.location.href = "login.html"
+        
       } catch (error) {
         alert("Error connecting to server")
         console.error("Registration error:", error)
       }
     })
   })
-  
