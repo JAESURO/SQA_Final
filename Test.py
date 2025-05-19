@@ -45,9 +45,9 @@ def driver():
         chrome_options.add_argument("--allow-insecure-localhost")
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
         drv = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
-        logging.info("✅ Successfully opened Chrome")
+        logging.info(" Successfully opened Chrome")
     except WebDriverException as e:
-        logging.error(f"❌ Failed to open Chrome: {e}")
+        logging.error(f" Failed to open Chrome: {e}")
         raise
 
     drv.implicitly_wait(10)
@@ -79,11 +79,11 @@ def take_screenshot(driver, name):
 def test_register_and_login(driver):
     wait = WebDriverWait(driver, 10)
     driver.get("http://localhost:8080/login.html")
-    logging.info("🟢 Opened login page")
+    logging.info(" Opened login page")
 
     timestamp = int(time.time())
     test_email = f"testuser{timestamp}@example.com"
-    logging.info(f"🧪 Using test email: {test_email}")
+    logging.info(f"Using test email: {test_email}")
 
     driver.find_element(By.ID, "registerLink").click()
     wait.until(EC.visibility_of_element_located((By.ID, "email"))).send_keys(test_email)
@@ -91,30 +91,30 @@ def test_register_and_login(driver):
     driver.find_element(By.ID, "confirmPassword").send_keys("Test@1234")
     take_screenshot(driver, "register_success_screen")
     driver.find_element(By.CSS_SELECTOR, "button.login-btn").click()
-    logging.info("📩 Submitted registration form")
+    logging.info(" Submitted registration form")
 
     try:
         alert = WebDriverWait(driver, 5).until(EC.alert_is_present())
-        logging.info(f"⚠️ Alert appeared: {alert.text}")
+        logging.info(f"Alert appeared: {alert.text}")
         alert.accept()
     except TimeoutException:
-        pytest.fail("❌ No alert appeared after registration")
+        pytest.fail("No alert appeared after registration")
 
     try:
         WebDriverWait(driver, 10).until(EC.url_contains("login.html"))
         wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
-        logging.info("✅ Redirected to login page")
+        logging.info(" Redirected to login page")
     except TimeoutException:
-        pytest.fail("❌ Redirect to login.html did not happen")
+        pytest.fail(" Redirect to login.html did not happen")
 
     wait.until(EC.visibility_of_element_located((By.ID, "email"))).send_keys(test_email)
     driver.find_element(By.ID, "password").send_keys("Test@1234")
     driver.find_element(By.CSS_SELECTOR, "button.login-btn").click()
-    logging.info("🔐 Submitted login form")
+    logging.info(" Submitted login form")
 
     header = wait.until(EC.visibility_of_element_located((By.XPATH, "//h1[contains(text(),'Task Manager')]")))
     assert header.is_displayed(), "Login failed"
-    logging.info("✅ Login successful")
+    logging.info(" Login successful")
     time.sleep(1)
     take_screenshot(driver, "login_success_screen")
 
@@ -142,7 +142,7 @@ def pytest_runtest_makereport(item, call):
                     except Exception as e:
                         logging.error(f"Failed to take failure screenshot: {e}")
                         return
-                logging.error(f"❌ Test failed screenshot saved: {screenshot_path}")
+                logging.error(f" Test failed screenshot saved: {screenshot_path}")
                 if hasattr(rep, "extra"):
                     rep.extra.append(pytest.html.extras.image(screenshot_path))
             except Exception as e:
